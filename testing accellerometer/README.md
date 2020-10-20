@@ -1,6 +1,5 @@
-Hello-world
+MPU Data
 ===========
+Build and run this on a sensor tag, it will output the MPU data at 3Hz which you can view using ./kermusb
 
-This adds the hello-world process in hello-world.c to the platform build, which
-prints "Hello-world" to stdout on startup and toggles the SensorTag's Red LED, every second.
-
+To save this to a file just do ./kermusb > output.txt
