@@ -8,20 +8,20 @@ import pymysql
 # Will use in configuration and class code.
 from sqlalchemy.ext.declarative import declarative_base
 
-app = Flask(__name__)
+application = Flask(__name__)
 
 # database
 db = pymysql.connect('database-1.cdezsf3cj776.us-east-2.rds.amazonaws.com', 'mgysel', '205LeBron!205')
 cursor = db.cursor()
 
 # Use gait_data database
-sql = '''use gait_data'''
+sql = '''use gait'''
 cursor.execute(sql)
 
-def insert_details(ip_address,mean,median,skewness,standard_deviation):
+def insert_details(ip_address,mean,median,skewness,standard_deviation,data):
     sql = '''
-    insert into user(ip_address, mean, median, skewness, standard_deviation) values('%s', '%s', '%s', '%s', '%s')
-    ''' % ('127.0.0.1', 1.1, 1.2, 1.3, 1.4)
+    insert into user(ip_address, mean, median, skewness, standard_deviation, data) values('%s', '%s', '%s', '%s', '%s', '%s')
+    ''' % (ip_address, mean, median, skewness, standard_deviation, data)
     cursor.execute(sql)
     db.commit()
 
@@ -31,7 +31,7 @@ def get_details():
     details = cursor.fetchall()
     return details
 
-@app.route('/')
+@application.route('/')
 def index():
     details = get_details()
     return render_template('index.html', var=details)
@@ -40,20 +40,22 @@ def index():
 Displays input data received
 Used to test that data can be sent from SensorTag
 '''
-@app.route('/inputData', methods=['POST'])
+@application.route('/inputData', methods=['POST'])
 def input_data():
     if request.method == 'POST':
+        ip_address = request.remote_addr
         data = request.get_json()
+        insert_details(ip_address, 100, 100, 1, 1)
+        print(ip_address)
         print(data)
         #return render_template('inputdata.html', var=data)
         return dumps(data)
-
 
 '''
 Inserts ip_address, mean, median, skewness, and standard_deviation data into database
 Used to test database functionality
 '''
-@app.route('/insert',methods = ['post'])
+@application.route('/insert',methods = ['POST'])
 def insert():
     if request.method == 'POST':
         ip_address = request.form['ip_address']
@@ -61,7 +63,8 @@ def insert():
         median = request.form['median']
         skewness = request.form['skewness']
         standard_deviation = request.form['standard_deviation']
-        insert_details(ip_address, mean, median, skewness, standard_deviation)
+        data = request.form['data']
+        insert_details(ip_address, mean, median, skewness, standard_deviation, data)
         details = get_details()
         print(details)
         '''
@@ -76,6 +79,7 @@ def insert():
 if __name__ == "__main__":
     # Setting debug to True enables debug output. This line should be
     # removed before deploying a production app.
-    app.debug = True
-    app.run(host='127.0.0.1', port=8004)
+    application.debug = True
+    #application.run(host='127.0.0.1', port=8004)
     #app.run()
+    app.run(host='0.0.0.0')
