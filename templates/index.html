@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Details</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+   
+  <link rel="stylesheet" href=" https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href=" https://fonts.googleapis.com/css?family=Lora">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="static/css/styles.min.css">
+</head>
+<body>
+
+<div class="container">
+  
+  <div>
+    <br><br>
+      <div class="col-sm-4">
+          <h4>Fill in the form</h4>
+            <form action="/insert" method="POST">
+              <div class="form-group">
+                <label for="ip_address">IP Address:</label>
+                <input name="ip_address" type="text" class="form-control" id="ip_address">
+              </div>
+              <div class="form-group">
+                <label for="mean">Mean:</label>
+                <input name="mean" type="text" class="form-control" id="mean">
+              </div>
+              <div class="form-group">
+                <label for="median">Median:</label>
+                <input name="median" type="text" class="form-control" id="median">
+              </div>
+              <div class="form-group">
+                <label for="skewness">Skewness:</label>
+                <input name="skewness" type="text" class="form-control" id="skewness">
+              </div>
+              <div class="form-group">
+                <label for="standard_deviation">Standard Devation:</label>
+                <input name="standard_deviation" type="text" class="form-control" id="standard_deviation">
+              </div>
+              <br>
+              <input type="submit" name="submit" value="Submit" class="btn btn-success">
+            </form>
+      </div>
+    </div>
+    <hr>
+
+    <h4> The details are:</h4>
+    {% for i in var: %}
+    <br>Entry: {{ i }}</br>
+    {% endfor %}
+
+     
+    <br>
+    <br>
+    <hr>
+</div>
+
+</body>
+</html>
