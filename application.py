@@ -44,8 +44,8 @@ def input_data():
     if request.method == 'POST':
         data = request.get_json()
         print(data)
-        return render_template('inputdata.html', var=data)
-        #return dumps(data)
+        #return render_template('inputdata.html', var=data)
+        return dumps(data)
 
 
 '''
@@ -76,5 +76,5 @@ if __name__ == "__main__":
     # Setting debug to True enables debug output. This line should be
     # removed before deploying a production app.
     app.debug = True
-    app.run(host='127.0.0.1', port=8003)
+    app.run(host='127.0.0.1', port=8004)
     #app.run()
