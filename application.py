@@ -33,7 +33,8 @@ def get_details():
 
 @app.route('/')
 def index():
-    return render_template('index.html')
+    details = get_details()
+    return render_template('index.html', var=details)
 
 '''
 Displays input data received
