@@ -31,10 +31,19 @@ def get_details():
     details = cursor.fetchall()
     return details
 
-@application.route('/')
+@application.route('/', methods=['GET', 'POST'])
 def index():
-    details = get_details()
-    return render_template('index.html', var=details)
+    if request.method == 'GET':
+        details = get_details()
+        return render_template('index.html', var=details)
+    elif request.method == 'POST':
+        #ip_address = request.remote_addr
+        data = request.get_json()
+        insert_details('ip_address', 100, 100, 1, 1, 'data')
+        #print(ip_address)
+        print(data)
+        #return render_template('inputdata.html', var=data)
+        return dumps(data)
 
 '''
 Displays input data received
@@ -45,7 +54,7 @@ def input_data():
     if request.method == 'POST':
         ip_address = request.remote_addr
         data = request.get_json()
-        insert_details(ip_address, 100, 100, 1, 1)
+        insert_details(ip_address, 100, 100, 1, 1, 'data')
         print(ip_address)
         print(data)
         #return render_template('inputdata.html', var=data)
@@ -81,5 +90,5 @@ if __name__ == "__main__":
     # removed before deploying a production app.
     application.debug = True
     #application.run(host='127.0.0.1', port=8004)
-    app.run()
-    #app.run(host='0.0.0.0')
+    application.run()
+    #application.run(host='0.0.0.0')
