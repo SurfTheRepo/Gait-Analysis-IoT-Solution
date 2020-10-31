@@ -37,13 +37,15 @@ def index():
         details = get_details()
         return render_template('index.html', var=details)
     elif request.method == 'POST':
-        #ip_address = request.remote_addr
-        data = request.get_json()
-        insert_details('ip_address', 100, 100, 1, 1, 'data')
-        #print(ip_address)
-        print(data)
+        ip_address = request.remote_addr
+        data = dumps(request.get_json())
+        insert_details(ip_address, 100, 100, 1, 1, data)
+        print(ip_address)
+        print(f'Data: {data}')
         #return render_template('inputdata.html', var=data)
-        return dumps(data)
+        details = get_details()
+        print(details)
+        return render_template('index.html',var=details)
 
 '''
 Displays input data received
