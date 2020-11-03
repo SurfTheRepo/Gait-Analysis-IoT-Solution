@@ -24,7 +24,7 @@ def main():
     protocol = yield from Context.create_client_context()
 
     request = Message(code=GET)
-    request.set_request_uri('coap://[aaaa::212:4b00:1204:dd72]:5683/sensor/gyro/x')
+    request.set_request_uri('coap://[aaaa::212:4b00:1205:288b]:5683/sensor/gyro/x')
     request.opt.observe = 0
     #Configure the IP address of the CoAP server here
     #Also, you may need to change the URL depending on the implementation of your CoAP server
@@ -41,9 +41,12 @@ def main():
     else:
       print("Sending all")
         #sock.sendall(response.payload)
-      myobj = {"data": response.payload.decode('utf-8')}
+      result = response.payload.decode('utf-8')
+      cut = result.split("|");
+      myobj = {"ip_address": cut[0],
+               "data": cut[1]}
       header = {'Content-Type': 'application/json', 'Accept': 'application/json'}
-      x = requests.post(url='http://18.190.138.228', data=json.dumps(myobj), headers=header)
+      x = requests.post(url='http://13.58.23.49', data=json.dumps(myobj), headers=header)
       print(x.status_code, x.encoding, x.reason)
       #finally:
         #sock.close()

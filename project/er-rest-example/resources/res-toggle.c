@@ -44,9 +44,11 @@
 #include "rest-engine.h"
 #include "dev/leds.h"
 #include "board-peripherals.h"
+#include "project-conf.h"
+#include "ieee-addr.h"
 #include <limits.h>
 
-#define CHUNKS_TOTAL    4200
+#define CHUNKS_TOTAL 5000    
 #define MAX_AGE      60
 static void res_get_handler_x(void *request, void *response, uint8_t *buffer, uint16_t preferred_size, int32_t *offset);
 
@@ -54,35 +56,39 @@ static struct ctimer timer_ctimer;		//Callback Timer
 static int counter_ctimer;
  // hold timer vals
 static int n;
-
-static int indexVal = 0;
-static int sendval[900];
 static int interval_counter = 0;
-static int count = 0;
+static int numMeasurements = 0;
 
  // hold timer vals
 /*
  * Use local resource state that is accessed by res_get_handler() and altered by res_periodic_handler() or PUT or POST.
  */
 static int32_t event_counter = 0;
+static uint8_t mac_addr[8];
 static void res_periodic_handler(void);
-PERIODIC_RESOURCE(res_mpu_x,
+void do_nothing();
+RESOURCE(res_mpu_x,
          "title=\"Gyro-x\";rt=\"Gyro\";obs",
          res_get_handler_x,
          NULL,
          NULL,
-         NULL,
-         CLOCK_SECOND / 50,
-         res_periodic_handler);
+         NULL);
 
 // GYRO Sensors
 /*---------------------------------------------------------------------------*/
 
+// Update the Sensor!
+void take_measure() {
+	gx = mpu_9250_sensor.value(MPU_9250_SENSOR_TYPE_GYRO_X);
+	gy = mpu_9250_sensor.value(MPU_9250_SENSOR_TYPE_GYRO_Y);
+	gz = mpu_9250_sensor.value(MPU_9250_SENSOR_TYPE_GYRO_Z);
+	ax = mpu_9250_sensor.value(MPU_9250_SENSOR_TYPE_ACC_X);
+	ay = mpu_9250_sensor.value(MPU_9250_SENSOR_TYPE_ACC_Y);
+	az = mpu_9250_sensor.value(MPU_9250_SENSOR_TYPE_ACC_Z);
+}
 static void
 res_get_handler_x(void *request, void *response, uint8_t *buffer, uint16_t preferred_size, int32_t *offset)
 {	
-	
-
   char *str;
 	unsigned int accept = -1;
   REST.get_header_accept(request, &accept);
@@ -91,8 +97,8 @@ res_get_handler_x(void *request, void *response, uint8_t *buffer, uint16_t prefe
 	REST.set_header_max_age(response, MAX_AGE);
 	// Chunks
 	int32_t strpos = 0;
-	
-	//ctimer_set(&timer_ctimer, CLOCK_SECOND / 50, updateTime, NULL);
+	ctimer_set(&timer_ctimer, CLOCK_SECOND / 50, take_measure, NULL);
+
   /* Check the offset for boundaries of the resource data. */
   if(*offset >= CHUNKS_TOTAL) {
     REST.set_response_status(response, REST.status.BAD_OPTION);
@@ -106,8 +112,19 @@ res_get_handler_x(void *request, void *response, uint8_t *buffer, uint16_t prefe
   /* Generate data until reaching CHUNKS_TOTAL. */
 	// Fill the Buffer at a rate of 50 Hertz
   while(strpos < preferred_size) {
-		strpos += snprintf((char *)buffer + strpos, preferred_size - strpos + 1,  "ax%day%daz%dgx%dgy%dgz%d",sendval[count], sendval[count+1], sendval[count+2], sendval[count+3], sendval[count+4], sendval[count+5]);
-	count += 6;
+		if (numMeasurements >= 3000) // 5 seconds of readings
+		{
+			break;
+		}
+		if (numMeasurements == 0 ) {
+			ieee_addr_cpy_to(mac_addr, (uint8_t) 8);
+			strpos += snprintf((char *)buffer + strpos, preferred_size - strpos + 1,  "%x:%x:%x:%x:%x:%x:%x:%x|", mac_addr[0], mac_addr[1], mac_addr[2], mac_addr[3],mac_addr[4], mac_addr[5], mac_addr[6], mac_addr[7]);
+			++numMeasurements;
+		} else {
+		++numMeasurements;
+		strpos += snprintf((char *)buffer + strpos, preferred_size - strpos + 1,  "ax%lday%ldaz%ldgx%ldgy%ldgz%ld", ax, ay, az, gx, gy, gz);
+}
+	
   }
 
   /* snprintf() does not adjust return value if truncated by size. */
@@ -126,30 +143,6 @@ res_get_handler_x(void *request, void *response, uint8_t *buffer, uint16_t prefe
   /* Signal end of resource representation. */
   if(*offset >= CHUNKS_TOTAL) {
     *offset = -1;
+		numMeasurements = 0;
   }
 }
-static void
-res_periodic_handler()
-{		
-		while (interval_counter < 150) {
-		int gyroX = mpu_9250_sensor.value(MPU_9250_SENSOR_TYPE_GYRO_X);
-		int gyroY = mpu_9250_sensor.value(MPU_9250_SENSOR_TYPE_GYRO_Y);
-		int gyroZ = mpu_9250_sensor.value(MPU_9250_SENSOR_TYPE_GYRO_Z);
-		int accX = mpu_9250_sensor.value(MPU_9250_SENSOR_TYPE_ACC_X);
-		int accY = mpu_9250_sensor.value(MPU_9250_SENSOR_TYPE_ACC_Y);
-		int accZ = mpu_9250_sensor.value(MPU_9250_SENSOR_TYPE_ACC_Z);
-		
-		sendval[indexVal] = gyroX;
-		sendval[indexVal+1] = gyroY;
-    sendval[indexVal+2] = gyroZ;
-		sendval[indexVal+3] = accX;
-		sendval[indexVal+4] = accY;
-    sendval[indexVal+5] = accZ;
-		indexVal += 6;
-		++interval_counter;
-}
-    /* Notify the registered observers which will trigger the res_get_handler to create the response. */
-    REST.notify_subscribers(&res_mpu_x);
-		interval_counter = 0;
-} 
-  /* The REST.subscription_handler() will be called for observable resources by the REST framework. */

@@ -39,6 +39,7 @@
 #ifndef __PROJECT_ERBIUM_CONF_H__
 #define __PROJECT_ERBIUM_CONF_H__
 
+int gx,gy,gz,ax,ay,az;
 /* Custom channel and PAN ID configuration for your project. */
 /*
    #undef RF_CHANNEL

@@ -68,6 +68,7 @@
  * Resources to be activated need to be imported through the extern keyword.
  * The build system automatically compiles the resources in the corresponding sub-directory.
  */
+
 extern resource_t
   res_hello,
   res_mirror,
@@ -151,19 +152,13 @@ PROCESS_THREAD(er_example_server, ev, data)
 
   /* Define application-specific events here. */
   while(1) {
-    PROCESS_WAIT_EVENT();
-#if PLATFORM_HAS_BUTTON
-    if(ev == sensors_event && data == &button_sensor) {
-      PRINTF("*******BUTTON*******\n");
-
-      /* Call the event_handler for this application-specific event. */
-      res_event.trigger();
-
-      /* Also call the separate response example handler. */
-      res_separate.resume();
-    }
-
-#endif /* PLATFORM_HAS_BUTTON */
+    PROCESS_WAIT_EVENT_UNTIL(ev == sensors_event && data == &mpu_9250_sensor);
+		gx = mpu_9250_sensor.value(MPU_9250_SENSOR_TYPE_GYRO_X);
+		gy = mpu_9250_sensor.value(MPU_9250_SENSOR_TYPE_GYRO_Y);
+		gz = mpu_9250_sensor.value(MPU_9250_SENSOR_TYPE_GYRO_Z);
+		ax = mpu_9250_sensor.value(MPU_9250_SENSOR_TYPE_ACC_X);
+		ay = mpu_9250_sensor.value(MPU_9250_SENSOR_TYPE_ACC_Y);
+		az = mpu_9250_sensor.value(MPU_9250_SENSOR_TYPE_ACC_Z);
   }                             /* while (1) */
 
   PROCESS_END();
