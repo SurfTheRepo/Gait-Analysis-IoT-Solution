@@ -161,9 +161,7 @@ PROCESS_THREAD(er_example_server, ev, data)
 
       /* Also call the separate response example handler. */
       res_separate.resume();
-    } else if(ev == sensors_event && data == &mpu_9250_sensor) {
-			printf("HELLO");
-		}
+    }
 
 #endif /* PLATFORM_HAS_BUTTON */
   }                             /* while (1) */
