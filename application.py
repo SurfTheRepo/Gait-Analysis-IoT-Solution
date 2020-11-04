@@ -18,15 +18,15 @@ cursor = db.cursor()
 sql = '''use gait'''
 cursor.execute(sql)
 
-def insert_details(ip_address,mean,median,skewness,standard_deviation,data):
+def insert_details(ip_address,data):
     sql = '''
-    insert into user(ip_address, mean, median, skewness, standard_deviation, data) values('%s', '%s', '%s', '%s', '%s', '%s')
-    ''' % (ip_address, mean, median, skewness, standard_deviation, data)
+    insert into user_gait_data(ip_address, data) values('%s', '%s')
+    ''' % (ip_address, data)
     cursor.execute(sql)
     db.commit()
 
 def get_details():
-    sql = '''select * from user'''
+    sql = '''select * from user_gait_data'''
     cursor.execute(sql)
     details = cursor.fetchall()
     return details
@@ -40,7 +40,7 @@ def index():
         raw_data = request.get_json()
         ip_address = raw_data['ip_address']
         data = raw_data['data']
-        insert_details(ip_address, 100, 100, 1, 1, data)
+        insert_details(ip_address, data)
         print(f'IP Address: {ip_address}')
         print(f'Data: {data}')
         #return render_template('inputdata.html', var=data)
@@ -63,26 +63,22 @@ def input_data():
     if request.method == 'POST':
         ip_address = request.remote_addr
         data = request.get_json()
-        insert_details(ip_address, 100, 100, 1, 1, 'data')
+        insert_details(ip_address, 'data')
         print(ip_address)
         print(data)
         #return render_template('inputdata.html', var=data)
         return dumps(data)
 
 '''
-Inserts ip_address, mean, median, skewness, and standard_deviation data into database
+Inserts ip_address and raw data into database
 Used to test database functionality
 '''
 @application.route('/insert',methods = ['POST'])
 def insert():
     if request.method == 'POST':
         ip_address = request.form['ip_address']
-        mean = request.form['mean']
-        median = request.form['median']
-        skewness = request.form['skewness']
-        standard_deviation = request.form['standard_deviation']
         data = request.form['data']
-        insert_details(ip_address, mean, median, skewness, standard_deviation, data)
+        insert_details(ip_address, data)
         details = get_details()
         print(details)
         '''
@@ -98,6 +94,6 @@ if __name__ == "__main__":
     # Setting debug to True enables debug output. This line should be
     # removed before deploying a production app.
     application.debug = True
-    application.run(host='127.0.0.1', port=8005)
+    application.run(host='127.0.0.1', port=8006)
     #application.run()
     #application.run(host='0.0.0.0')
