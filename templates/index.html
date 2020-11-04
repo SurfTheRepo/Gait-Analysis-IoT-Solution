@@ -17,7 +17,7 @@
   
   <div>
     <br><br>
-      <div class="col-sm-4">
+      <div class="col-sm-4" style="display: none">
           <h4>Fill in the form</h4>
             <form action="/insert" method="POST">
               <div class="form-group">
@@ -35,7 +35,7 @@
     </div>
     <hr>
 
-    <h4> The details are:</h4>
+    <h4> Database:</h4>
     {% for i in var: %}
     <br>Entry: {{ i }}</br>
     {% endfor %}
