@@ -37,10 +37,9 @@ def index():
         details = get_details()
         return render_template('index.html', var=details)
     elif request.method == 'POST':
-        #ip_address = request.remote_addr
-        ip_address = request.environ.get('HTTP_X_REAL_IP', request.remote_addr)   
-        #ip_address = request.environ['REMOTE_ADDR']
-        data = dumps(request.get_json())
+        raw_data = request.get_json()
+        ip_address = raw_data['ip_address']
+        data = raw_data['data']
         insert_details(ip_address, 100, 100, 1, 1, data)
         print(f'IP Address: {ip_address}')
         print(f'Data: {data}')
@@ -48,6 +47,12 @@ def index():
         details = get_details()
         print(details)
         return render_template('index.html',var=details)
+
+@application.route('/homepage', methods=['GET'])
+def homepage():
+    if request.method == 'GET':
+        details = get_details()
+        return render_template('homepage.html', var=details)
 
 '''
 Displays input data received
@@ -93,6 +98,6 @@ if __name__ == "__main__":
     # Setting debug to True enables debug output. This line should be
     # removed before deploying a production app.
     application.debug = True
-    application.run(host='127.0.0.1', port=8004)
+    application.run(host='127.0.0.1', port=8005)
     #application.run()
     #application.run(host='0.0.0.0')
