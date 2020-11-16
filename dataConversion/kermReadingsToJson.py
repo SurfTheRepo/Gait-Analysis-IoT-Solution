@@ -28,12 +28,14 @@ az_array = []
 gx_array = []
 gy_array = []
 gz_array = []
+total2_array = []
 time_array=[]
 
 for line in f:
     lineMatching = template.match(line)
     if(lineMatching):
         time, ax, ay, az, gx, gy, gz = lineMatching.group(1,2,3,4,5,6,7)
+        total2 = int(ax)**2 +int(ay)**2 + int(az)**2
         ax_array.append(int(ax))
         ay_array.append(int(ay))
         az_array.append(int(az))
@@ -41,7 +43,9 @@ for line in f:
         gy_array.append(int(gy))
         gz_array.append(int(gz))
         time_array.append(int(time))
-        
+        total2_array.append(total2)
+        print(ax,ay,az,total2)
+
 print('ax_array'+str(sys.argv[2])+'.data', 'wb')
 
 with open('ax_array'+str(sys.argv[2])+'.txt', 'w') as filehandle:
@@ -58,5 +62,7 @@ with open('gz_array'+str(sys.argv[2])+'.txt', 'w') as filehandle:
     json.dump(gz_array, filehandle)
 with open('time_array'+str(sys.argv[2])+'.txt', 'w') as filehandle:
     json.dump(time_array, filehandle)
+with open('total_array'+str(sys.argv[2])+'.txt', 'w') as filehandle:
+    json.dump(total2_array, filehandle)
     
 
