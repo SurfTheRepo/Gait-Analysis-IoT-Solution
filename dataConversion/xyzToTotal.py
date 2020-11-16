@@ -24,12 +24,12 @@ at = json.load(ft)
 print(az)
 total_array= []
 for values in zip(ax,ay,az,at):
-    total_array.append(values[0]+ values[1] + values[2])
+    total_array.append(values[0]**2+ values[1]**2 + values[2]**2)
 
     # total_array.append(str(values[3])+ ','+ str(values[0]+ values[1] + values[2]))
     print(values)
 
 print(total_array)
-with open('total_array'+str(sys.argv[1])+'.txt', 'w') as filehandle:
+with open('totalsqr_array'+str(sys.argv[1])+'.txt', 'w') as filehandle:
     json.dump(total_array,filehandle)
 # fx= open()
