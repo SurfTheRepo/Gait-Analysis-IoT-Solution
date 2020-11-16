@@ -48,7 +48,7 @@
 #include "ieee-addr.h"
 #include <limits.h>
 
-#define CHUNKS_TOTAL 5000    
+#define CHUNKS_TOTAL 5200    
 #define MAX_AGE      60
 static void res_get_handler_x(void *request, void *response, uint8_t *buffer, uint16_t preferred_size, int32_t *offset);
 
@@ -111,19 +111,22 @@ res_get_handler_x(void *request, void *response, uint8_t *buffer, uint16_t prefe
 
   /* Generate data until reaching CHUNKS_TOTAL. */
 	// Fill the Buffer at a rate of 50 Hertz
+	uint8_t *bufferTwo;
+	int val = snprintf((char *)bufferTwo + strpos, preferred_size - strpos + 1,  "n%dax%lday%ldaz%ldgx%ldgy%ldgz%ldE", numMeasurements, ax, ay, az, gx, gy, gz);
   while(strpos < preferred_size) {
-		if (numMeasurements >= 3000) // 5 seconds of readings
+		if (numMeasurements >= 3000) 
 		{
 			break;
 		}
 		if (numMeasurements == 0 ) {
 			ieee_addr_cpy_to(mac_addr, (uint8_t) 8);
-			strpos += snprintf((char *)buffer + strpos, preferred_size - strpos + 1,  "%x:%x:%x:%x:%x:%x:%x:%x|", mac_addr[0], mac_addr[1], mac_addr[2], mac_addr[3],mac_addr[4], mac_addr[5], mac_addr[6], mac_addr[7]);
+			strpos += snprintf((char *)buffer + strpos, preferred_size - strpos + 1,  "%x:%x:%x:%x:%x:%x:%x:%x", mac_addr[0], mac_addr[1], mac_addr[2], mac_addr[3],mac_addr[4], mac_addr[5], mac_addr[6], mac_addr[7]);
 			++numMeasurements;
 		} else {
 		++numMeasurements;
-		strpos += snprintf((char *)buffer + strpos, preferred_size - strpos + 1,  "ax%lday%ldaz%ldgx%ldgy%ldgz%ld", ax, ay, az, gx, gy, gz);
-}
+		strpos += snprintf((char *)buffer + strpos, preferred_size - strpos + 1,  "n%dax%lday%ldaz%ldgx%ldgy%ldgz%ldE", numMeasurements, ax, ay, az, gx, gy, gz);
+		
+	}
 	
   }
 
