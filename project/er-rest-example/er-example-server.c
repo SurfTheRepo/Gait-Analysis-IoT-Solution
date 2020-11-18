@@ -96,8 +96,9 @@ extern resource_t res_temperature;
 #endif
 extern resource_t res;
 
+PROCESS(readings, "Light Readings");
 PROCESS(er_example_server, "Erbium Example Server");
-AUTOSTART_PROCESSES(&er_example_server);
+AUTOSTART_PROCESSES(&er_example_server, &readings);
 
 PROCESS_THREAD(er_example_server, ev, data)
 {
@@ -162,4 +163,20 @@ PROCESS_THREAD(er_example_server, ev, data)
   }                             /* while (1) */
 
   PROCESS_END();
+}
+
+PROCESS_THREAD(readings, ev, data)
+{
+	PROCESS_BEGIN()
+	while (1) {
+		PROCESS_WAIT_EVENT_UNTIL(ev == sensors_event && data == &mpu_9250_sensor);
+		gx = mpu_9250_sensor.value(MPU_9250_SENSOR_TYPE_GYRO_X);
+		gy = mpu_9250_sensor.value(MPU_9250_SENSOR_TYPE_GYRO_Y);
+		gz = mpu_9250_sensor.value(MPU_9250_SENSOR_TYPE_GYRO_Z);
+		ax = mpu_9250_sensor.value(MPU_9250_SENSOR_TYPE_ACC_X);
+		ay = mpu_9250_sensor.value(MPU_9250_SENSOR_TYPE_ACC_Y);
+		az = mpu_9250_sensor.value(MPU_9250_SENSOR_TYPE_ACC_Z);
+		clock_wait(CLOCK_SECOND / 50);
+	}
+	PROCESS_END();
 }
