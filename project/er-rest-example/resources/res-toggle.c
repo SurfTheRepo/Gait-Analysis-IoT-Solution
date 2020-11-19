@@ -78,14 +78,6 @@ RESOURCE(res_mpu_x,
 /*---------------------------------------------------------------------------*/
 
 // Update the Sensor!
-void take_measure() {
-	gx = mpu_9250_sensor.value(MPU_9250_SENSOR_TYPE_GYRO_X);
-	gy = mpu_9250_sensor.value(MPU_9250_SENSOR_TYPE_GYRO_Y);
-	gz = mpu_9250_sensor.value(MPU_9250_SENSOR_TYPE_GYRO_Z);
-	ax = mpu_9250_sensor.value(MPU_9250_SENSOR_TYPE_ACC_X);
-	ay = mpu_9250_sensor.value(MPU_9250_SENSOR_TYPE_ACC_Y);
-	az = mpu_9250_sensor.value(MPU_9250_SENSOR_TYPE_ACC_Z);
-}
 static void
 res_get_handler_x(void *request, void *response, uint8_t *buffer, uint16_t preferred_size, int32_t *offset)
 {	
@@ -97,7 +89,6 @@ res_get_handler_x(void *request, void *response, uint8_t *buffer, uint16_t prefe
 	REST.set_header_max_age(response, MAX_AGE);
 	// Chunks
 	int32_t strpos = 0;
-	ctimer_set(&timer_ctimer, CLOCK_SECOND / 50, take_measure, NULL);
 
   /* Check the offset for boundaries of the resource data. */
   if(*offset >= CHUNKS_TOTAL) {
