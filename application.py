@@ -107,7 +107,7 @@ def insert():
         '''
         return render_template('index.html',var=details)
 
-
+'''
 @application.route('/test', methods = ['GET', 'POST'])
 def test():
     if request.method == 'GET':
@@ -144,7 +144,7 @@ def test():
         return render_template('results.html', var=results)
         # Test data with ML algorithm
         # TEST ML HERE
-
+'''
 
 # run the app.
 if __name__ == "__main__":
