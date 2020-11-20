@@ -8,7 +8,7 @@ import pymysql
 import re
 # Will use in configuration and class code.
 from sqlalchemy.ext.declarative import declarative_base
-#from app_ml import classify
+from app_ml import classify
 
 application = Flask(__name__)
 
@@ -136,8 +136,8 @@ def test():
             gz_array.append(int(gz))
             sqrsTotal.append(int(ax)**2 +int(ay)**2 +int(az)**2)
 
-        #results = classify(ax_array, ay_array, az_array)
-        results = ax_array
+        results = classify(ax_array, ay_array, az_array)
+        #results = ax_array
         print(results)
 
         return render_template('results.html', var=results)
@@ -149,6 +149,6 @@ if __name__ == "__main__":
     # Setting debug to True enables debug output. This line should be
     # removed before deploying a production app.
     application.debug = True
-    application.run(host='127.0.0.1', port=8011)
+    application.run(host='127.0.0.1', port=8012)
     #application.run()
     #application.run(host='0.0.0.0')
