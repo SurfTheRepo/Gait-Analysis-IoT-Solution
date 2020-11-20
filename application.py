@@ -8,7 +8,7 @@ import pymysql
 import re
 # Will use in configuration and class code.
 from sqlalchemy.ext.declarative import declarative_base
-#from app_ml import classify
+from app_ml import classify
 
 application = Flask(__name__)
 
@@ -151,6 +151,6 @@ if __name__ == "__main__":
     # Setting debug to True enables debug output. This line should be
     # removed before deploying a production app.
     application.debug = True
-    application.run(host='127.0.0.1', port=8007)
+    application.run(host='127.0.0.1', port=8008)
     #application.run()
     #application.run(host='0.0.0.0')

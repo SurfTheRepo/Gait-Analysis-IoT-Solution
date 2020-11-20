@@ -59,8 +59,8 @@ def classify(test_ax, test_ay, test_az):
     
     time_millis = [ i*20 for i in range(0, len(test_ax)) ]
     
-    #X_train = np.load('X_train.npy')
-    #y_train = np.load('y_train.npy')
+    X_train = np.load('X_train.npy')
+    y_train = np.load('y_train.npy')
     print("Training...")
     clf = KNeighborsClassifier(n_neighbors=4)
     clf.fit(X_train, y_train)
