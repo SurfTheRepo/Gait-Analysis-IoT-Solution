@@ -1,10 +1,10 @@
 import json
 import numpy as np
 import pandas as pd
-import matplotlib.pyplot as plt
+#import matplotlib.pyplot as plt
 from scipy.signal import find_peaks
 from scipy.signal import butter, lfilter
-from sklearn.preprocessing import normalize
+#from sklearn.preprocessing import normalize
 from sklearn.neighbors import KNeighborsClassifier
 
 def bandfilter(ax, ay, az):

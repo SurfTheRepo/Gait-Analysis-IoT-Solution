@@ -107,7 +107,6 @@ def insert():
         '''
         return render_template('index.html',var=details)
 
-'''
 @application.route('/test', methods = ['GET', 'POST'])
 def test():
     if request.method == 'GET':
@@ -144,13 +143,12 @@ def test():
         return render_template('results.html', var=results)
         # Test data with ML algorithm
         # TEST ML HERE
-'''
 
 # run the app.
 if __name__ == "__main__":
     # Setting debug to True enables debug output. This line should be
     # removed before deploying a production app.
     application.debug = True
-    application.run(host='127.0.0.1', port=8008)
+    application.run(host='127.0.0.1', port=8009)
     #application.run()
     #application.run(host='0.0.0.0')
