@@ -136,7 +136,7 @@ def test():
             gz_array.append(int(gz))
             sqrsTotal.append(int(ax)**2 +int(ay)**2 +int(az)**2)
 
-        results = classify(ax_array, ay_array, az_array)
+        #results = classify(ax_array, ay_array, az_array)
         results = ax_array
         print(results)
 
@@ -149,6 +149,6 @@ if __name__ == "__main__":
     # Setting debug to True enables debug output. This line should be
     # removed before deploying a production app.
     application.debug = True
-    application.run(host='127.0.0.1', port=8009)
+    application.run(host='127.0.0.1', port=8010)
     #application.run()
     #application.run(host='0.0.0.0')
