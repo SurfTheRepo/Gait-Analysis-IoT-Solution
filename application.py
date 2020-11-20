@@ -73,8 +73,11 @@ def input_data():
 Inserts ip_address and raw data into database
 Used to test database functionality
 '''
-@application.route('/insert',methods = ['POST'])
+@application.route('/insert',methods = ['GET','POST'])
 def insert():
+    if request.method == 'GET':
+        details = get_details()
+        return render_template('inputdata.html',var=details)
     if request.method == 'POST':
         ip_address = request.form['ip_address']
         data = request.form['data']
