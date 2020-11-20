@@ -107,7 +107,7 @@ def insert():
         '''
         return render_template('index.html',var=details)
 
-'''
+
 @application.route('/test', methods = ['GET', 'POST'])
 def test():
     if request.method == 'GET':
@@ -137,13 +137,14 @@ def test():
             gz_array.append(int(gz))
             sqrsTotal.append(int(ax)**2 +int(ay)**2 +int(az)**2)
 
-        results = classify(ax_array, ay_array, az_array)
+        #results = classify(ax_array, ay_array, az_array)
+        results = ax_array
         print(results)
 
         return render_template('results.html', var=results)
         # Test data with ML algorithm
         # TEST ML HERE
-'''
+
 
 # run the app.
 if __name__ == "__main__":
