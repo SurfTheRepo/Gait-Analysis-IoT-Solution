@@ -8,7 +8,7 @@ import pymysql
 import re
 # Will use in configuration and class code.
 from sqlalchemy.ext.declarative import declarative_base
-from app_ml import classify
+#from app_ml import classify
 
 application = Flask(__name__)
 
