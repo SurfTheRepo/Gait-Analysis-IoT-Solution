@@ -5,8 +5,10 @@ from sqlalchemy import create_engine, func
 from sqlalchemy.orm import sessionmaker
 from json import dumps
 import pymysql
+import re
 # Will use in configuration and class code.
 from sqlalchemy.ext.declarative import declarative_base
+from app_ml import classify
 
 application = Flask(__name__)
 
@@ -37,10 +39,22 @@ def index():
         details = get_details()
         return render_template('index.html', var=details)
     elif request.method == 'POST':
+        # Get data
         raw_data = request.get_json()
+
+        # Parse data
         ip_address = raw_data['ip_address']
         data = raw_data['data']
+
+        '''
+        # TODO - Clean data
+        # 1. Turn data into ax, ay, az
+        # 2. Check who data is
+        '''
+        # Insert data into database
         insert_details(ip_address, data)
+
+        # Return index page with variables
         print(f'IP Address: {ip_address}')
         print(f'Data: {data}')
         #return render_template('inputdata.html', var=data)
@@ -58,6 +72,7 @@ def homepage():
 Displays input data received
 Used to test that data can be sent from SensorTag
 '''
+'''
 @application.route('/inputData', methods=['POST'])
 def input_data():
     if request.method == 'POST':
@@ -68,6 +83,7 @@ def input_data():
         print(data)
         #return render_template('inputdata.html', var=data)
         return dumps(data)
+'''
 
 '''
 Inserts ip_address and raw data into database
@@ -91,6 +107,41 @@ def insert():
         '''
         return render_template('index.html',var=details)
 
+@application.route('/test', methods = ['GET', 'POST'])
+def test():
+    if request.method == 'GET':
+        return render_template('testml.html')
+    if request.method == 'POST':
+        
+        # Get data from site
+        data = request.form['data']
+
+        template = re.compile('ax(-?\d+)ay(-?\d+)az(-?\d+)gx(-?\d+)gy(-?\d+)gz(-?\d+)')
+        readings = template.findall(data)
+
+        ax_array = []
+        ay_array = []
+        az_array = []
+        gx_array = []
+        gy_array = []
+        gz_array = []
+        sqrsTotal = []
+        for line in readings:
+            ax, ay, az, gx, gy, gz = line
+            ax_array.append(int(ax))
+            ay_array.append(int(ay))
+            az_array.append(int(az))
+            gx_array.append(int(gx))
+            gy_array.append(int(gy))
+            gz_array.append(int(gz))
+            sqrsTotal.append(int(ax)**2 +int(ay)**2 +int(az)**2)
+
+        results = classify(ax_array, ay_array, az_array)
+        print(results)
+
+        return render_template('results.html', var=results)
+        # Test data with ML algorithm
+        # TEST ML HERE
 
 # run the app.
 if __name__ == "__main__":
