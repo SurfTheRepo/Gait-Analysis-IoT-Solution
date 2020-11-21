@@ -133,7 +133,6 @@ PROCESS_THREAD(er_example_server, ev, data)
   rest_activate_resource(&res_push, "test/push");
 	rest_activate_resource(&res_mpu_x, "sensor/gyro/x");
 
-	mpu_9250_sensor.configure(SENSORS_ACTIVE, MPU_9250_SENSOR_TYPE_ALL);
 #if PLATFORM_HAS_LEDS
 
 #endif
@@ -161,6 +160,7 @@ PROCESS_THREAD(er_example_server, ev, data)
 
 PROCESS_THREAD(readings, ev, data)
 {
+		mpu_9250_sensor.configure(SENSORS_ACTIVE, MPU_9250_SENSOR_TYPE_ALL);
 	PROCESS_BEGIN()
 	while (1) {
 		PROCESS_WAIT_EVENT_UNTIL(ev == sensors_event && data == &mpu_9250_sensor);
