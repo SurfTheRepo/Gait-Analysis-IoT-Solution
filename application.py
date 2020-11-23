@@ -158,14 +158,12 @@ def index():
 
         insert_details('ip_address', who)
         return render_template('results.html', var=who)
-        # Test data with ML algorithm
-        # TEST ML HERE
 
 # run the app.
 if __name__ == "__main__":
     # Setting debug to True enables debug output. This line should be
     # removed before deploying a production app.
     application.debug = True
-    application.run(host='127.0.0.1', port=8011)
+    application.run(host='127.0.0.1', port=8015)
     #application.run()
     #application.run(host='0.0.0.0')
