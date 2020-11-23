@@ -127,6 +127,9 @@ def index():
         ip_address = raw_data['ip_address']
         data = raw_data['data']
 
+        print("Raw Data")
+        print(data)
+
         # template = re.compile('ax(-?\d+)ay(-?\d+)az(-?\d+)gx(-?\d+)gy(-?\d+)gz(-?\d+)')
         template = re.compile('n(\d+),(-?\d+),(-?\d+),(-?\d+)')
 

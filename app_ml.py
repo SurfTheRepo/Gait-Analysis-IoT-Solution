@@ -59,6 +59,9 @@ def classify(test_ax, test_ay, test_az):
     
     time_millis = [ i*20 for i in range(0, len(test_ax)) ]
     
+    print(f"test_ax={test_ax}")
+    print(f"test_ay={test_ay}")
+    print(f"test_az={test_az}")
     X_train = np.load('X_train.npy')
     y_train = np.load('y_train.npy')
     print("Training...")
