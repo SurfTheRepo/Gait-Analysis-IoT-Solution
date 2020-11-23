@@ -127,7 +127,9 @@ def index():
         ip_address = raw_data['ip_address']
         data = raw_data['data']
 
-        template = re.compile('ax(-?\d+)ay(-?\d+)az(-?\d+)gx(-?\d+)gy(-?\d+)gz(-?\d+)')
+        # template = re.compile('ax(-?\d+)ay(-?\d+)az(-?\d+)gx(-?\d+)gy(-?\d+)gz(-?\d+)')
+        template = re.compile('n(\d+),(-?\d+),(-?\d+),(-?\d+)')
+
         readings = template.findall(data)
 
         ax_array = []
@@ -153,6 +155,8 @@ def index():
 
         if (results):
             who = "Otto"
+        else if (results == None):
+            who = "More data needed, peaks not detected"
         else:
             who = "Hasaru"
 
@@ -164,6 +168,6 @@ if __name__ == "__main__":
     # Setting debug to True enables debug output. This line should be
     # removed before deploying a production app.
     application.debug = True
-    application.run(host='127.0.0.1', port=8015)
+    application.run(host='127.0.0.1', port=8016)
     #application.run()
     #application.run(host='0.0.0.0')
