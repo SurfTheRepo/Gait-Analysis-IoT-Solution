@@ -138,19 +138,12 @@ def index():
         ax_array = []
         ay_array = []
         az_array = []
-        gx_array = []
-        gy_array = []
-        gz_array = []
-        sqrsTotal = []
         for line in readings:
-            ax, ay, az, gx, gy, gz = line
+            ax, ay, az = line
             ax_array.append(int(ax))
             ay_array.append(int(ay))
             az_array.append(int(az))
-            gx_array.append(int(gx))
-            gy_array.append(int(gy))
-            gz_array.append(int(gz))
-            sqrsTotal.append(int(ax)**2 +int(ay)**2 +int(az)**2)
+          
 
         results = classify(ax_array, ay_array, az_array)
         #results = ax_array
