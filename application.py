@@ -155,7 +155,7 @@ def index():
 
         if (results):
             who = "Otto"
-        else if (results == None):
+        elif (results == None):
             who = "More data needed, peaks not detected"
         else:
             who = "Hasaru"
@@ -168,6 +168,6 @@ if __name__ == "__main__":
     # Setting debug to True enables debug output. This line should be
     # removed before deploying a production app.
     application.debug = True
-    application.run(host='127.0.0.1', port=8016)
+    application.run(host='127.0.0.1', port=8017)
     #application.run()
     #application.run(host='0.0.0.0')
