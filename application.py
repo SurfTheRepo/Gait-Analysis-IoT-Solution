@@ -139,7 +139,7 @@ def index():
         ay_array = []
         az_array = []
         for line in readings:
-            ax, ay, az = line
+            _ , ax, ay, az = line
             ax_array.append(int(ax))
             ay_array.append(int(ay))
             az_array.append(int(az))
@@ -164,6 +164,6 @@ if __name__ == "__main__":
     # Setting debug to True enables debug output. This line should be
     # removed before deploying a production app.
     application.debug = True
-    application.run(host='127.0.0.1', port=8018)
+    application.run(host='127.0.0.1', port=8019)
     #application.run()
     #application.run(host='0.0.0.0')
