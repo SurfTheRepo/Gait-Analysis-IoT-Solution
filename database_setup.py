@@ -56,7 +56,7 @@ class User(Base):
 		)
 
 #####INSERT AT END OF FILE######
-connection_string = "mysql+pymysql://mgysel:205LeBron!205@database-1.cdezsf3cj776.us-east-2.rds.amazonaws.com:3306/database-1"
+connection_string = ""
 
 
 # Create instance of create_engine class
